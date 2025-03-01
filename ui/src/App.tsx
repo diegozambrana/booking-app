@@ -3,20 +3,17 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import { Button, Typography } from "@mui/material";
+import { BrowserRouter, Route, Routes } from "react-router";
+import { Admin, Chat } from "./pages";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <div className="card">
-      <Button
-        onClick={() => setCount((count) => count + 1)}
-        color="primary"
-        variant="contained"
-      >
-        count is {count}
-      </Button>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Chat />} />
+        <Route path="/admin" element={<Admin />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
