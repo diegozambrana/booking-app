@@ -7,6 +7,7 @@ from service.handle_data import (
     retrieve_booking_by_id,
     create_booking,
     delete_booking,
+    get_list_technicians,
 )
 from db.models import BookingCreate
 
@@ -59,3 +60,12 @@ def create_booking_route(booking: BookingCreate):
 def delete_booking_route(booking_id: int):
     delete_booking(booking_id)
     return {"message": "Booking deleted"}
+
+
+@app.get("/technicians")
+def list_technicians(
+    offset: int = 0,
+    limit: Annotated[int, Query(le=100)] = 100,
+):
+    technicians = get_list_technicians(offset, limit)
+    return technicians

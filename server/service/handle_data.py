@@ -80,3 +80,12 @@ def create_technician(name: str, profession: str) -> dict:
         session.add(technician)
         session.commit()
         return {"message": "Technician created"}
+
+
+def get_list_technicians(offset: int = 0, limit: int = 100) -> list[Technician]:
+    """
+    Get list of technicians
+    """
+    with Session(engine) as session:
+        query = session.query(Technician).offset(offset).limit(limit)
+        return query.all()
