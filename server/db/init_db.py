@@ -14,13 +14,6 @@ def populate_initial_data():
         if session.exec(select(Booking)).first():
             return
 
-        # plumber = Profession(name="Plumber")
-        # electrician = Profession(name="Electrician")
-        # welder = Profession(name="Welder")
-
-        # session.add_all([plumber, electrician, welder])
-        # session.commit()
-
         nicolas = Technician(name="Nicolas Woollett", profession="plumber")
         franky = Technician(name="Franky Flay", profession="electrician")
         griselda = Technician(name="Griselda Dickson", profession="welder")

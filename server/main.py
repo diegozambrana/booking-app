@@ -1,5 +1,6 @@
 from typing import Annotated
 from fastapi import FastAPI, Query
+from fastapi.middleware.cors import CORSMiddleware
 from db.init_db import create_db_and_tables, populate_initial_data
 from service.handle_data import (
     get_list_bookings,
@@ -9,9 +10,18 @@ from service.handle_data import (
 )
 from db.models import BookingCreate
 
-
 app = FastAPI(
     title="Booking app",
+)
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
