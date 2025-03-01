@@ -4,14 +4,14 @@
 
 FastAPI app with Sqlite DB
 
-## Development
+### Development
 
 - Create a virtual environment
 - Install requirements `pip install -r requirements.txt`
 - Run locally with the command `fastapi dev`
 - Open (http://localhost:8000/docs)[http://localhost:8000/docs]
 
-### DATABASE
+#### DATABASE
 
 Exists 2 models: `Technician` and `Booking`.
 
@@ -23,3 +23,9 @@ Exists 2 models: `Technician` and `Booking`.
 ## Frontend
 
 ReactJS app with MUI
+
+### Development
+
+- Install dependencies `npm install`
+- Run locally `npm run dev`
+- Open (http://localhost:5173)[http://localhost:5173]
