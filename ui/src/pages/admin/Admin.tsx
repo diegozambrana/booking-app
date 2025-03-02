@@ -13,11 +13,13 @@ import {
   TableHead,
   TableRow,
   Typography,
+  Link as LinkBase,
 } from "@mui/material";
 import { Add, Delete } from "@mui/icons-material";
 import { Booking } from "../../types/booking";
 import { ActionModal } from "../../components/Modal";
 import { CreateBooking } from "./components/CreateBooking";
+import { Link } from "react-router";
 
 export const Admin: FC = () => {
   const { bookings, deleteBooking, createBooking } = useBooking();
@@ -34,6 +36,11 @@ export const Admin: FC = () => {
 
   return (
     <Container maxWidth="md">
+      <Box mb={2}>
+        <LinkBase component={Link} to="/">
+          Chat
+        </LinkBase>
+      </Box>
       <Box mb={1}>
         <Typography variant="h3" component={"h1"}>
           Admin

@@ -8,10 +8,12 @@ import {
   Stack,
   TextField,
   Typography,
+  Link as LinkBase,
 } from "@mui/material";
 import { BaseSyntheticEvent, FC } from "react";
 import { useChat } from "./useChat";
 import { MessageBox } from "./components";
+import { Link } from "react-router";
 
 export const Chat: FC = () => {
   const {
@@ -25,6 +27,12 @@ export const Chat: FC = () => {
 
   return (
     <Container maxWidth="md">
+      <Box mb={2}>
+        <LinkBase component={Link} to="/admin">
+          Admin
+        </LinkBase>
+      </Box>
+
       <Card>
         <CardContent>
           <Box>
