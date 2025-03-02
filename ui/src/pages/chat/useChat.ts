@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Message } from "../../types/message";
 import { useCommand } from "../../api/useCommand";
 import { useBooking } from "../../api/useBooking";

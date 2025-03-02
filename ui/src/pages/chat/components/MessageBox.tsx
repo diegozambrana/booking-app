@@ -2,7 +2,6 @@ import { FC } from "react";
 import { Message } from "../../../types/message";
 import { Box, Stack } from "@mui/material";
 import { CreateBox } from "./CreateBox";
-import { CreateBookingData } from "../../../types/booking";
 
 const boxStyles = {
   minWidth: 200,
