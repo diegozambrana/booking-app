@@ -1,6 +1,8 @@
 import { FC } from "react";
 import { Message } from "../../../types/message";
 import { Box, Stack } from "@mui/material";
+import { CreateBox } from "./CreateBox";
+import { CreateBookingData } from "../../../types/booking";
 
 const boxStyles = {
   minWidth: 200,
@@ -9,7 +11,17 @@ const boxStyles = {
   borderRadius: 2,
 };
 
-export const MessageBox: FC<{ message: Message }> = ({ message }) => {
+type MessageBoxProps = {
+  message: Message;
+  onCreateConfirm: () => void;
+  lastElement: boolean;
+};
+
+export const MessageBox: FC<MessageBoxProps> = ({
+  message,
+  onCreateConfirm,
+  lastElement,
+}) => {
   return (
     <div>
       {message.sender === "user" ? (
@@ -33,12 +45,22 @@ export const MessageBox: FC<{ message: Message }> = ({ message }) => {
             sx={{
               ...boxStyles,
               backgroundColor: "rgba(0,0,0,0.1)",
-              textAlign: "right",
+              textAlign: "left",
               borderBottomLeftRadius: 0,
             }}
             my={1}
           >
-            {message.content}
+            {(message.responseData?.status === "error" ||
+              !message.responseData) &&
+              message.content}
+            {message.responseData?.type === "create" &&
+              message.responseData?.status === "success" && (
+                <CreateBox
+                  responseData={message.responseData}
+                  onCreateConfirm={onCreateConfirm}
+                  displayActions={lastElement}
+                />
+              )}
           </Box>
         </Stack>
       )}

@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Card,
-  CardActions,
   CardContent,
   Container,
   Stack,
@@ -15,7 +14,14 @@ import { useChat } from "./useChat";
 import { MessageBox } from "./components";
 
 export const Chat: FC = () => {
-  const { input, setInput, sendMessage, messages } = useChat();
+  const {
+    input,
+    setInput,
+    sendMessage,
+    messages,
+    loading,
+    handleCreateBooking,
+  } = useChat();
 
   return (
     <Container maxWidth="md">
@@ -38,27 +44,43 @@ export const Chat: FC = () => {
             p={2}
           >
             {messages.map((message, index) => (
-              <MessageBox key={index} message={message} />
+              <MessageBox
+                key={index}
+                message={message}
+                onCreateConfirm={handleCreateBooking}
+                lastElement={index === messages.length - 1}
+              />
             ))}
           </Box>
           <Box>
-            <Stack direction="row" spacing={2}>
-              <Box width={1}>
-                <TextField
-                  size="small"
-                  fullWidth
-                  value={input}
-                  onChange={(e: BaseSyntheticEvent) => setInput(e.target.value)}
-                />
-              </Box>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => sendMessage()}
-              >
-                <Send />
-              </Button>
-            </Stack>
+            <form
+              onSubmit={(e: BaseSyntheticEvent) => {
+                e.preventDefault();
+                sendMessage();
+              }}
+            >
+              <Stack direction="row" spacing={2}>
+                <Box width={1}>
+                  <TextField
+                    size="small"
+                    fullWidth
+                    value={input}
+                    onChange={(e: BaseSyntheticEvent) =>
+                      setInput(e.target.value)
+                    }
+                    disabled={loading}
+                  />
+                </Box>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  disabled={loading}
+                >
+                  <Send />
+                </Button>
+              </Stack>
+            </form>
           </Box>
         </CardContent>
       </Card>

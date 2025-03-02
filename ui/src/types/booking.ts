@@ -5,3 +5,8 @@ export type Booking = {
   datetime: string;
   technician: Technician;
 };
+
+export type CreateBookingData = {
+  technician_id: number;
+  datetime: string;
+};

@@ -20,12 +20,23 @@ Exists 2 models: `Technician` and `Booking`.
 * Booking (id: int, technician_id: int, datetime: str)
 ```
 
+### OpenAI API integration
+
+You need the API key for OpenAI integration. add the API Key in a env file.
+
+```
+# /server/.env
+OPENAI_API_KEY=<API_KEY>
+```
+
 ## Frontend
 
 ReactJS app with MUI
 
 ### Development
 
-- Install dependencies `npm install`
-- Run locally `npm run dev`
-- Open (http://localhost:5173)[http://localhost:5173]
+- got to ui directory `cd ui`.
+- Install dependencies `npm install`.
+- Run locally `npm run dev`.
+- run `cp .env.example .env` to generate the .env file.
+- Open (http://localhost:5173)[http://localhost:5173].

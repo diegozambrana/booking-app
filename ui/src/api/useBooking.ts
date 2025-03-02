@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { Booking } from "../types/booking";
+import { Booking, CreateBookingData } from "../types/booking";
 import { api } from "../utils/api";
-import { Technician } from "../types/technician";
 
-export const useBooking = () => {
+export const useBooking = (lazy: boolean = false) => {
   const [bookings, setBookings] = useState<Booking[]>([]);
 
   useEffect(() => {
-    fetchBookings();
-  }, []);
+    if (!lazy) {
+      fetchBookings();
+    }
+  }, [lazy]);
 
   const fetchBookings = async () => {
     api.get("/bookings").then((response) => {
@@ -21,12 +22,12 @@ export const useBooking = () => {
     setBookings((prev) => prev.filter((booking) => booking.id !== id));
   };
 
-  const createBooking = async (data: {
-    technician_id: number;
-    datetime: string;
-  }) => {
-    api.post("/bookings", data).then(() => {
-      fetchBookings();
+  const createBooking = async (data: CreateBookingData) => {
+    return api.post("/bookings", data).then((response) => {
+      if (!lazy) {
+        fetchBookings();
+      }
+      return response;
     });
   };
 
