@@ -9,7 +9,8 @@ from service.handle_data import (
     delete_booking,
     get_list_technicians,
 )
-from db.models import BookingCreate
+from db.models import BookingCreate, ProcessTextRequest
+from service.process_text import process_text_command
 
 app = FastAPI(
     title="Booking app",
@@ -63,9 +64,15 @@ def delete_booking_route(booking_id: int):
 
 
 @app.get("/technicians")
-def list_technicians(
+def list_technicians_route(
     offset: int = 0,
     limit: Annotated[int, Query(le=100)] = 100,
 ):
     technicians = get_list_technicians(offset, limit)
     return technicians
+
+
+@app.post("/process-text")
+def process_text_command_route(data: ProcessTextRequest):
+    response = process_text_command(data.command)
+    return response

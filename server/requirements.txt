@@ -1,6 +1,6 @@
 fastapi==0.115.9
-fastapi-cli==0.0.7
+openai==1.65.2
 pydantic==2.10.6
-pydantic_core==2.27.2
+python-dotenv==1.0.1
 starlette==0.45.3
 uvicorn==0.34.0

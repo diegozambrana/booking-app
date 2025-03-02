@@ -22,3 +22,7 @@ class Booking(SQLModel, table=True):
 class BookingCreate(SQLModel):
     technician_id: int
     datetime: datetime
+
+
+class ProcessTextRequest(SQLModel):
+    command: str

@@ -4,6 +4,7 @@ from fastapi import HTTPException
 from sqlmodel import Session, select
 from db.models import Booking, Technician
 from db.config import engine
+from datetime import datetime, timedelta
 
 
 def select_booking():
@@ -89,3 +90,43 @@ def get_list_technicians(offset: int = 0, limit: int = 100) -> list[Technician]:
     with Session(engine) as session:
         query = session.query(Technician).offset(offset).limit(limit)
         return query.all()
+
+
+# Custom functions to get data
+
+
+def get_technician_available(profession_name: str, check_datetime: datetime):
+    """
+    Get a technician available for a given profession and datetime
+    """
+    with Session(engine) as session:
+        query_technicians = select(Technician).where(
+            Technician.profession == profession_name
+        )
+        technicians = session.exec(query_technicians).all()
+
+        if not technicians:
+            # If the profession does not exist, return None
+            return None
+
+        # Review if the technician is available
+        for technician in technicians:
+            query_booking = (
+                select(Booking)
+                .where(Booking.technician_id == technician.id)
+                .where(
+                    (Booking.datetime <= check_datetime)
+                    & (Booking.datetime + timedelta(hours=1) > check_datetime)
+                )
+            )
+            existing_booking = session.exec(query_booking).first()
+
+            if existing_booking is None:
+                return {
+                    "id": technician.id,
+                    "name": technician.name,
+                    "profession": profession_name,
+                }
+
+        # If no technician is available, return None
+        return None
