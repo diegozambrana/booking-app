@@ -1,8 +1,10 @@
-from dotenv import dotenv_values
+import os
+from dotenv import load_dotenv, find_dotenv
 from openai import OpenAI
 
-config = dotenv_values()
-OPENAI_API_KEY = config["OPENAI_API_KEY"]
+_ = load_dotenv(find_dotenv())
+
+OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 
