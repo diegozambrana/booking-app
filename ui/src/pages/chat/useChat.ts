@@ -37,21 +37,29 @@ export const useChat = () => {
   };
 
   const handleShortMessage = () => {
+    let isActionComplete = false;
+    const addUserComment = () => {
+      addMessage({
+        type: "text",
+        content: input,
+        sender: "user",
+        timestamp: new Date().toISOString(),
+      });
+    };
     if (input.toLowerCase().includes("yes")) {
+      addUserComment();
       if (
         messages[messages.length - 1].responseData?.type === "create" &&
         messages[messages.length - 1].responseData?.status === "success"
       ) {
         handleCreateBooking();
         setInput("");
-        return true;
       } else if (
         messages[messages.length - 1].responseData?.type === "delete" &&
         messages[messages.length - 1].responseData?.status === "success"
       ) {
         handleDeleteBooking();
         setInput("");
-        return true;
       } else {
         addMessage({
           type: "text",
@@ -60,9 +68,10 @@ export const useChat = () => {
           timestamp: new Date().toISOString(),
         });
         setInput("");
-        return true;
       }
+      isActionComplete = true;
     } else if (input.toLowerCase().includes("no")) {
+      addUserComment();
       addMessage({
         type: "text",
         content: "Do you need anything else?",
@@ -70,9 +79,9 @@ export const useChat = () => {
         timestamp: new Date().toISOString(),
       });
       setInput("");
-      return true;
+      isActionComplete = true;
     }
-    return false;
+    return isActionComplete;
   };
 
   const sendMessage = async () => {
