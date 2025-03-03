@@ -1,6 +1,6 @@
 export type ResponseData = {
   status: "success" | "error";
-  type: "create" | "delete" | "list" | "unknown";
+  type: "create" | "delete" | "list" | "retrieve" | "unknown";
   message: string;
   object?: any;
   datetime?: string;

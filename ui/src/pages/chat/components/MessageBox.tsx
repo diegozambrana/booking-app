@@ -2,6 +2,8 @@ import { FC } from "react";
 import { Message } from "../../../types/message";
 import { Box, Stack } from "@mui/material";
 import { CreateBox } from "./CreateBox";
+import { DetailBox } from "./DetailBox";
+import { DeleteBox } from "./DeleteBox";
 
 const boxStyles = {
   minWidth: 200,
@@ -13,12 +15,14 @@ const boxStyles = {
 type MessageBoxProps = {
   message: Message;
   onCreateConfirm: () => void;
+  onDeleteConfirm: () => void;
   lastElement: boolean;
 };
 
 export const MessageBox: FC<MessageBoxProps> = ({
   message,
   onCreateConfirm,
+  onDeleteConfirm,
   lastElement,
 }) => {
   return (
@@ -57,6 +61,18 @@ export const MessageBox: FC<MessageBoxProps> = ({
                 <CreateBox
                   responseData={message.responseData}
                   onCreateConfirm={onCreateConfirm}
+                  displayActions={lastElement}
+                />
+              )}
+            {message.responseData?.type === "retrieve" &&
+              message.responseData?.status === "success" && (
+                <DetailBox responseData={message.responseData} />
+              )}
+            {message.responseData?.type === "delete" &&
+              message.responseData?.status === "success" && (
+                <DeleteBox
+                  responseData={message.responseData}
+                  onDeleteConfirm={onDeleteConfirm}
                   displayActions={lastElement}
                 />
               )}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Message } from "../../types/message";
 import { useCommand } from "../../api/useCommand";
 import { useBooking } from "../../api/useBooking";
@@ -6,7 +6,8 @@ import { CreateBookingData } from "../../types/booking";
 
 export const useChat = () => {
   const { sendCommand, loading } = useCommand();
-  const { createBooking } = useBooking(true);
+  const { createBooking, deleteBooking } = useBooking(true);
+  const contextRef = useRef<any[]>([]);
 
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -16,6 +17,7 @@ export const useChat = () => {
       timestamp: new Date().toISOString(),
     },
   ]);
+
   const [input, setInput] = useState("");
 
   const addMessage = (message: Message) => {
@@ -42,8 +44,22 @@ export const useChat = () => {
         sender: "user",
         timestamp: new Date().toISOString(),
       });
-      const dataResponse = await sendCommand(input);
-      handleResponse(dataResponse);
+
+      // add context
+      const context =
+        contextRef.current.length > 0 ? JSON.stringify(contextRef.current) : "";
+
+      const dataResponse = await sendCommand(input, context);
+      if (dataResponse.status >= 400) {
+        addMessage({
+          type: "text",
+          content: "There was an error processing the command.",
+          sender: "bot",
+          timestamp: new Date().toISOString(),
+        });
+      } else {
+        handleResponse(dataResponse);
+      }
       setInput("");
     }
   };
@@ -67,9 +83,41 @@ export const useChat = () => {
       } as Message);
       return;
     }
+
+    // store the history of bookings
+    contextRef.current = [...contextRef.current, response.data.booking];
+
     addMessage({
       ...messageBase,
       content: "Booking created successfully. Do you need anything else?",
+    } as Message);
+  };
+
+  const handleDeleteBooking = async () => {
+    if (!messages[messages.length - 1].responseData) return;
+
+    const response = await deleteBooking(
+      messages[messages.length - 1].responseData?.object.id
+    );
+    const messageBase = {
+      type: "text",
+      sender: "bot",
+      timestamp: new Date().toISOString(),
+    };
+    if (response.status >= 400) {
+      addMessage({
+        ...messageBase,
+        content: "There was an error deleting the booking.",
+      } as Message);
+      return;
+    }
+
+    // store the history of bookings
+    contextRef.current = [...contextRef.current, response.data.booking];
+
+    addMessage({
+      ...messageBase,
+      content: "Booking was deleted successfully. Do you need anything else?",
     } as Message);
   };
 
@@ -80,5 +128,6 @@ export const useChat = () => {
     sendMessage,
     loading,
     handleCreateBooking,
+    handleDeleteBooking,
   };
 };

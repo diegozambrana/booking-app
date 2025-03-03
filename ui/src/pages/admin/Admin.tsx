@@ -4,22 +4,15 @@ import {
   Box,
   Button,
   Container,
-  IconButton,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Typography,
   Link as LinkBase,
 } from "@mui/material";
-import { Add, Delete } from "@mui/icons-material";
+import { Add } from "@mui/icons-material";
 import { Booking } from "../../types/booking";
 import { ActionModal } from "../../components/Modal";
 import { CreateBooking } from "./components/CreateBooking";
 import { Link } from "react-router";
+import { TableBooking } from "../../components/TableBooking";
 
 export const Admin: FC = () => {
   const { bookings, deleteBooking, createBooking } = useBooking();
@@ -57,46 +50,14 @@ export const Admin: FC = () => {
         </Box>
       </Box>
 
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Booking ID</TableCell>
-              <TableCell align="right">Datetime</TableCell>
-              <TableCell align="right">Technician</TableCell>
-              <TableCell align="right">Profession</TableCell>
-              <TableCell align="right">Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {bookings.map((booking) => (
-              <TableRow
-                key={booking.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {booking.id}
-                </TableCell>
-                <TableCell align="right">{booking.datetime}</TableCell>
-                <TableCell align="right">{booking.technician.name}</TableCell>
-                <TableCell align="right">
-                  {booking.technician.profession}
-                </TableCell>
-                <TableCell align="right">
-                  <IconButton
-                    onClick={() => {
-                      setSelectedBooking(booking);
-                      setDisplayDeleteModal(true);
-                    }}
-                  >
-                    <Delete />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <TableBooking
+        bookings={bookings}
+        enableActions
+        onDelete={(booking) => {
+          setSelectedBooking(booking);
+          setDisplayDeleteModal(true);
+        }}
+      />
 
       <ActionModal
         open={displayDeleteModal}

@@ -18,8 +18,9 @@ export const useBooking = (lazy: boolean = false) => {
   };
 
   const deleteBooking = async (id: number) => {
-    await api.delete(`/bookings/${id}`);
+    const response = await api.delete(`/bookings/${id}`);
     setBookings((prev) => prev.filter((booking) => booking.id !== id));
+    return response;
   };
 
   const createBooking = async (data: CreateBookingData) => {

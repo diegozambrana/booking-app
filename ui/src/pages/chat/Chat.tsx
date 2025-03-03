@@ -23,6 +23,7 @@ export const Chat: FC = () => {
     messages,
     loading,
     handleCreateBooking,
+    handleDeleteBooking,
   } = useChat();
 
   return (
@@ -53,9 +54,10 @@ export const Chat: FC = () => {
           >
             {messages.map((message, index) => (
               <MessageBox
-                key={index}
+                key={`message_${message.timestamp}`}
                 message={message}
                 onCreateConfirm={handleCreateBooking}
+                onDeleteConfirm={handleDeleteBooking}
                 lastElement={index === messages.length - 1}
               />
             ))}
