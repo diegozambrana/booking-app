@@ -26,3 +26,4 @@ class BookingCreate(SQLModel):
 
 class ProcessTextRequest(SQLModel):
     command: str
+    context: str

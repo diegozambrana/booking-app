@@ -1,5 +1,3 @@
-from typing import Annotated
-
 from fastapi import HTTPException
 from sqlmodel import Session, select
 from db.models import Booking, Technician
@@ -58,7 +56,10 @@ def delete_booking(booking_id: int) -> dict:
             raise HTTPException(status_code=404, detail="Booking not found")
         session.delete(booking)
         session.commit()
-        return {"message": "Booking deleted"}
+        return {
+            "message": "Booking deleted",
+            "booking": {"id": booking_id, "deleted": True},
+        }
 
 
 def create_booking(technician_id: int, datetime: str) -> dict:
@@ -69,7 +70,15 @@ def create_booking(technician_id: int, datetime: str) -> dict:
         booking = Booking(technician_id=technician_id, datetime=datetime)
         session.add(booking)
         session.commit()
-        return {"message": "Booking created"}
+        session.refresh(booking)
+        return {
+            "message": "Booking created",
+            "booking": {
+                "id": booking.id,
+                "technician_id": booking.technician_id,
+                "datetime": booking.datetime,
+            },
+        }
 
 
 def create_technician(name: str, profession: str) -> dict:

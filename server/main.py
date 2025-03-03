@@ -74,5 +74,5 @@ def list_technicians_route(
 
 @app.post("/process-text")
 def process_text_command_route(data: ProcessTextRequest):
-    response = process_text_command(data.command)
+    response = process_text_command(data.command, data.context)
     return response

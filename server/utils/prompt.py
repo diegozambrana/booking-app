@@ -1,7 +1,7 @@
 from datetime import datetime
 
 
-def get_prompt_messages(message: str):
+def get_prompt_messages(message: str, context: str):
     """
     Generate the prompt messages for the user and the system.
     """
@@ -27,13 +27,13 @@ def get_prompt_messages(message: str):
     ```
     {"type":"delete","booking_id":1}
     ```
-    * For list
+    * For list, entity can be either `booking` or `technician`
     ```
-    {"type":"list","id":1,"entity":"technician"}
+    {"type":"list","id":1,"entity":"booking"}
     ```
-    * For retrieve
+    * For retrieve, entity can be either `booking` or `technician`
     ```
-    {"type":"retrieve","booking_id":1,"entity":"technician"}
+    {"type":"retrieve","booking_id":1,"entity":"booking"}
     ```
     * For unknown
     ```
@@ -48,10 +48,17 @@ def get_prompt_messages(message: str):
     ~~~~~~~~~~~
     %s
     ~~~~~~~~~~~
-    today date is %s
+    
+    Today date is %s
+
+    This is the context of the previous actions and messages that you can use to generate the response:
+    ```
+    %s
+    ```
     """ % (
         message,
         datetime.now().isoformat(),
+        context,
     )
     return [
         {
