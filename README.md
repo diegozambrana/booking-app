@@ -1,5 +1,9 @@
 # Booking app
 
+## Architecture
+
+![Untitled Diagram drawio](https://github.com/user-attachments/assets/1616e9c0-75c4-40d7-b201-5c3b15b5478b)
+
 ## Backend
 
 FastAPI app with Sqlite DB
