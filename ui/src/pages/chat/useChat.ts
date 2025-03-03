@@ -36,7 +36,51 @@ export const useChat = () => {
     }
   };
 
+  const handleShortMessage = () => {
+    if (input.toLowerCase().includes("yes")) {
+      if (
+        messages[messages.length - 1].responseData?.type === "create" &&
+        messages[messages.length - 1].responseData?.status === "success"
+      ) {
+        handleCreateBooking();
+        setInput("");
+        return true;
+      } else if (
+        messages[messages.length - 1].responseData?.type === "delete" &&
+        messages[messages.length - 1].responseData?.status === "success"
+      ) {
+        handleDeleteBooking();
+        setInput("");
+        return true;
+      } else {
+        addMessage({
+          type: "text",
+          content: "I'm sorry, I didn't understand.",
+          sender: "bot",
+          timestamp: new Date().toISOString(),
+        });
+        setInput("");
+        return true;
+      }
+    } else if (input.toLowerCase().includes("no")) {
+      addMessage({
+        type: "text",
+        content: "Do you need anything else?",
+        sender: "bot",
+        timestamp: new Date().toISOString(),
+      });
+      setInput("");
+      return true;
+    }
+    return false;
+  };
+
   const sendMessage = async () => {
+    if (input.length === 0) return;
+    if (input.length < 10) {
+      const isActionComplete = handleShortMessage();
+      if (isActionComplete) return;
+    }
     if (input) {
       addMessage({
         type: "text",
