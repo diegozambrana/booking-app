@@ -53,8 +53,8 @@ export const MessageBox: FC<MessageBoxProps> = ({
             }}
             my={1}
           >
-            {(message.responseData?.status === "error" ||
-              !message.responseData) &&
+            {(!message.responseData ||
+              message.responseData?.status === "error") &&
               message.content}
             {message.responseData?.type === "create" &&
               message.responseData?.status === "success" && (

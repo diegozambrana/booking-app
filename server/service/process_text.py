@@ -4,7 +4,7 @@ from service.handle_data import (
     get_technician_available,
     retrieve_booking_by_id,
 )
-from service.openai_client import get_openai_response_content
+from utils.openai_client import get_openai_response_content
 from utils.prompt import get_prompt_messages
 
 
@@ -18,7 +18,6 @@ def analyze_command(command: str, context: str):
 def process_text_command(command: str, context: str):
     command = command.lower()
     command_obj = analyze_command(command, context)
-    print(command_obj)
 
     if command_obj["type"] == "create":
         technicians = get_list_technicians()
@@ -45,7 +44,8 @@ def process_text_command(command: str, context: str):
                 return {
                     "status": "error",
                     "type": "create",
-                    "message": "Technician not available",
+                    "message": "Technician not available on that time",
+                    "datetime": command_obj["datetime"],
                 }
 
         else:

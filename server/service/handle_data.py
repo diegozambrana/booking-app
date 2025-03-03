@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from sqlmodel import Session, select
+from sqlmodel import Session, select, and_
 from db.models import Booking, Technician
 from db.config import engine
 from datetime import datetime, timedelta
@@ -120,12 +120,15 @@ def get_technician_available(profession_name: str, check_datetime: datetime):
 
         # Review if the technician is available
         for technician in technicians:
-            query_booking = (
-                select(Booking)
-                .where(Booking.technician_id == technician.id)
-                .where(
-                    (Booking.datetime <= check_datetime)
-                    & (Booking.datetime + timedelta(hours=1) > check_datetime)
+            if isinstance(check_datetime, str):
+                check_datetime = datetime.fromisoformat(check_datetime)
+
+            query_booking = select(Booking).where(
+                and_(
+                    Booking.technician_id == technician.id,  # Filtra por el técnico
+                    Booking.datetime >= check_datetime,  # Inicio del rango
+                    Booking.datetime
+                    < check_datetime + timedelta(hours=1),  # Fin del rango
                 )
             )
             existing_booking = session.exec(query_booking).first()
