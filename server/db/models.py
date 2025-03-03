@@ -24,6 +24,11 @@ class BookingCreate(SQLModel):
     datetime: datetime
 
 
+class TechnicianCreate(SQLModel):
+    name: str
+    profession: str
+
+
 class ProcessTextRequest(SQLModel):
     command: str
     context: str

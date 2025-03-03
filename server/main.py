@@ -8,8 +8,9 @@ from service.handle_data import (
     create_booking,
     delete_booking,
     get_list_technicians,
+    create_technician,
 )
-from db.models import BookingCreate, ProcessTextRequest
+from db.models import BookingCreate, ProcessTextRequest, TechnicianCreate
 from service.process_text import process_text_command
 
 app = FastAPI(
@@ -70,6 +71,12 @@ def list_technicians_route(
 ):
     technicians = get_list_technicians(offset, limit)
     return technicians
+
+
+@app.post("/technicians")
+def create_technician_route(technician: TechnicianCreate):
+    response = create_technician(technician.name, technician.profession)
+    return response
 
 
 @app.post("/process-text")

@@ -11,9 +11,16 @@ export const useTechnicians = () => {
     });
   };
 
+  const createTechnician = async (data: {
+    name: string;
+    profession: string;
+  }) => {
+    return api.post("/technicians", data);
+  };
+
   useEffect(() => {
     fetchTechinicians();
   }, []);
 
-  return { technicians };
+  return { technicians, createTechnician };
 };

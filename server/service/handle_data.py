@@ -89,7 +89,8 @@ def create_technician(name: str, profession: str) -> dict:
         technician = Technician(name=name, profession=profession)
         session.add(technician)
         session.commit()
-        return {"message": "Technician created"}
+        session.refresh(technician)
+        return {"message": "Technician created", "technician": technician}
 
 
 def get_list_technicians(offset: int = 0, limit: int = 100) -> list[Technician]:
@@ -125,10 +126,9 @@ def get_technician_available(profession_name: str, check_datetime: datetime):
 
             query_booking = select(Booking).where(
                 and_(
-                    Booking.technician_id == technician.id,  # Filtra por el técnico
-                    Booking.datetime >= check_datetime,  # Inicio del rango
-                    Booking.datetime
-                    < check_datetime + timedelta(hours=1),  # Fin del rango
+                    Booking.technician_id == technician.id,
+                    Booking.datetime >= check_datetime,
+                    Booking.datetime < check_datetime + timedelta(hours=1),
                 )
             )
             existing_booking = session.exec(query_booking).first()

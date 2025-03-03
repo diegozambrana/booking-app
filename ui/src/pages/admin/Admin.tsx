@@ -6,6 +6,7 @@ import {
   Container,
   Typography,
   Link as LinkBase,
+  Stack,
 } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import { Booking } from "../../types/booking";
@@ -13,12 +14,15 @@ import { ActionModal } from "../../components/Modal";
 import { CreateBooking } from "./components/CreateBooking";
 import { Link } from "react-router";
 import { TableBooking } from "../../components/TableBooking";
+import { CreateTechnician } from "./components/CreateTechnician";
 
 export const Admin: FC = () => {
   const { bookings, deleteBooking, createBooking } = useBooking();
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [displayDeleteModal, setDisplayDeleteModal] = useState(false);
   const [displayCreateModal, setDisplayCreateModal] = useState(false);
+  const [displayCreateTechnicianModal, setDisplayCreateTechnicianModal] =
+    useState(false);
 
   const handleDeleteBooking = () => {
     if (selectedBooking) {
@@ -39,14 +43,24 @@ export const Admin: FC = () => {
           Admin
         </Typography>
         <Box my={2}>
-          <Button
-            color="primary"
-            variant="contained"
-            startIcon={<Add />}
-            onClick={() => setDisplayCreateModal(true)}
-          >
-            Add Booking
-          </Button>
+          <Stack direction="row" spacing={2}>
+            <Button
+              color="primary"
+              variant="contained"
+              startIcon={<Add />}
+              onClick={() => setDisplayCreateModal(true)}
+            >
+              Add Booking
+            </Button>
+            <Button
+              color="primary"
+              variant="contained"
+              startIcon={<Add />}
+              onClick={() => setDisplayCreateTechnicianModal(true)}
+            >
+              Add Technician
+            </Button>
+          </Stack>
         </Box>
       </Box>
 
@@ -66,16 +80,26 @@ export const Admin: FC = () => {
         description={`Are you sure you want to delete booking ${selectedBooking?.id}?`}
         onConfirm={handleDeleteBooking}
       />
-      <CreateBooking
-        open={displayCreateModal}
-        handleClose={() => {
-          setDisplayCreateModal(false);
-        }}
-        onConfirm={(data) => {
-          createBooking(data);
-          setDisplayCreateModal(false);
-        }}
-      />
+      {displayCreateModal && (
+        <CreateBooking
+          open={displayCreateModal}
+          handleClose={() => {
+            setDisplayCreateModal(false);
+          }}
+          onConfirm={(data) => {
+            createBooking(data);
+            setDisplayCreateModal(false);
+          }}
+        />
+      )}
+      {displayCreateTechnicianModal && (
+        <CreateTechnician
+          open={displayCreateTechnicianModal}
+          handleClose={() => {
+            setDisplayCreateTechnicianModal(false);
+          }}
+        />
+      )}
     </Container>
   );
 };
